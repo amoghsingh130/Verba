@@ -1,0 +1,10 @@
+name = "verba-feedback"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+
+[vars]
+# Set ANTHROPIC_API_KEY as a secret: npx wrangler secret put ANTHROPIC_API_KEY
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "915d1b5e8db646cc9108b01437e1d328"

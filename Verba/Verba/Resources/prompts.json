@@ -1,0 +1,462 @@
+[
+  {
+    "text": "What is the most important quality in a leader?",
+    "category": "Leadership",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Should companies prioritize innovation or stability?",
+    "category": "Business",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Describe a time you had to adapt quickly to change.",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "What role does failure play in success?",
+    "category": "Personal Growth",
+    "difficulty": "easy"
+  },
+  {
+    "text": "If you could solve one global problem, what would it be and why?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Is remote work better for productivity or collaboration?",
+    "category": "Business",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What makes a great team?",
+    "category": "Leadership",
+    "difficulty": "easy"
+  },
+  {
+    "text": "How do you handle disagreements with colleagues?",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Should universities focus more on practical skills or theoretical knowledge?",
+    "category": "Education",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What is the biggest challenge facing your generation?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How would you explain your biggest accomplishment to a five-year-old?",
+    "category": "Personal Growth",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What is more important: being respected or being liked?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Describe how technology will change education in the next decade.",
+    "category": "Education",
+    "difficulty": "hard"
+  },
+  {
+    "text": "If you had to give a TED talk tomorrow, what would it be about?",
+    "category": "Personal Growth",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What is the most underrated skill in the workplace?",
+    "category": "Business",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Should AI be regulated by governments? Why or why not?",
+    "category": "Big Picture",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Tell me about a project you are proud of and why.",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "How do you prioritize when everything feels urgent?",
+    "category": "Behavioral",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What does work-life balance mean to you?",
+    "category": "Personal Growth",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Argue for or against: social media does more harm than good.",
+    "category": "Big Picture",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What would you do in your first 90 days as CEO of a struggling company?",
+    "category": "Leadership",
+    "difficulty": "hard"
+  },
+  {
+    "text": "How do you stay motivated when working on something difficult?",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "What is the difference between a manager and a leader?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "If you could have dinner with any historical figure, who and why?",
+    "category": "Personal Growth",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Should companies be held responsible for their environmental impact?",
+    "category": "Business",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Describe a situation where you had to learn something completely new in a short time.",
+    "category": "Behavioral",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What is the role of empathy in decision-making?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How would you pitch your favorite hobby as a business?",
+    "category": "Business",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What does it mean to be a global citizen?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "If you could redesign the education system from scratch, what would you change?",
+    "category": "Education",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What does it mean to lead by example?",
+    "category": "Leadership",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Describe a leader you admire and what makes them effective.",
+    "category": "Leadership",
+    "difficulty": "easy"
+  },
+  {
+    "text": "How do you motivate someone who is underperforming?",
+    "category": "Leadership",
+    "difficulty": "easy"
+  },
+  {
+    "text": "When is it right for a leader to break the rules?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How should leaders handle public criticism?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What is the hardest part about giving negative feedback?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Should a leader always share bad news directly with their team?",
+    "category": "Leadership",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How would you build trust with a team that doesn't trust you yet?",
+    "category": "Leadership",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Describe how you would lead a team through a major reorganization.",
+    "category": "Leadership",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What is the cost of micromanagement, and when might it be justified?",
+    "category": "Leadership",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What makes a customer loyal to a brand?",
+    "category": "Business",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Describe a small business idea you find interesting.",
+    "category": "Business",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Why do most startups fail?",
+    "category": "Business",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Should companies pay for their employees' continued education?",
+    "category": "Business",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What role should employees have in company strategy decisions?",
+    "category": "Business",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Is brand reputation worth more than short-term profit?",
+    "category": "Business",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How important is company culture compared to compensation?",
+    "category": "Business",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Pitch a product that would solve a problem in your daily life.",
+    "category": "Business",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Defend or oppose: companies should publicly disclose all employee salaries.",
+    "category": "Business",
+    "difficulty": "hard"
+  },
+  {
+    "text": "How would you turn around a company losing market share?",
+    "category": "Business",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Tell me about a time you received difficult feedback.",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Describe a moment when you had to admit you were wrong.",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Tell me about a time you went above and beyond for someone.",
+    "category": "Behavioral",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Describe a conflict between two priorities and how you resolved it.",
+    "category": "Behavioral",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Tell me about a time you took a risk that didn't pay off.",
+    "category": "Behavioral",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Describe a time you persuaded someone to change their mind.",
+    "category": "Behavioral",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Tell me about a moment when you led without formal authority.",
+    "category": "Behavioral",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Describe a situation where you had to make a decision with incomplete information.",
+    "category": "Behavioral",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Tell me about a time you disagreed with your manager. What happened?",
+    "category": "Behavioral",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Describe the most difficult ethical decision you've faced.",
+    "category": "Behavioral",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What is one habit that has changed your life?",
+    "category": "Personal Growth",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Describe a moment you stepped outside your comfort zone.",
+    "category": "Personal Growth",
+    "difficulty": "easy"
+  },
+  {
+    "text": "What advice would you give your younger self?",
+    "category": "Personal Growth",
+    "difficulty": "easy"
+  },
+  {
+    "text": "What does success mean to you, and how has that definition changed?",
+    "category": "Personal Growth",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Describe a belief you once held strongly that you later changed.",
+    "category": "Personal Growth",
+    "difficulty": "medium"
+  },
+  {
+    "text": "What is the most important lesson someone has taught you?",
+    "category": "Personal Growth",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How do you respond to setbacks?",
+    "category": "Personal Growth",
+    "difficulty": "medium"
+  },
+  {
+    "text": "If you had only one year left to live, how would you spend it?",
+    "category": "Personal Growth",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Describe a fear you've overcome and how.",
+    "category": "Personal Growth",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What is the difference between confidence and arrogance?",
+    "category": "Personal Growth",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What invention would you reverse if you could?",
+    "category": "Big Picture",
+    "difficulty": "easy"
+  },
+  {
+    "text": "What does freedom mean to you?",
+    "category": "Big Picture",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Is happiness a choice?",
+    "category": "Big Picture",
+    "difficulty": "easy"
+  },
+  {
+    "text": "How will artificial intelligence reshape work in the next twenty years?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Should voting be mandatory in democracies?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Is cancel culture a force for accountability or for harm?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Will humans live on Mars in your lifetime?",
+    "category": "Big Picture",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Argue for or against: privacy is already dead.",
+    "category": "Big Picture",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What is the moral cost of cheap labor in global supply chains?",
+    "category": "Big Picture",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Should wealthy nations have an obligation to accept refugees?",
+    "category": "Big Picture",
+    "difficulty": "hard"
+  },
+  {
+    "text": "What is the most important subject not taught in schools today?",
+    "category": "Education",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Describe a teacher who changed your life.",
+    "category": "Education",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Should children learn a second language starting in kindergarten?",
+    "category": "Education",
+    "difficulty": "easy"
+  },
+  {
+    "text": "Is standardized testing a fair measure of student ability?",
+    "category": "Education",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Should homework be eliminated?",
+    "category": "Education",
+    "difficulty": "medium"
+  },
+  {
+    "text": "How do you keep learning after formal school ends?",
+    "category": "Education",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Is online learning as effective as in-person learning?",
+    "category": "Education",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Should students be allowed to grade their teachers?",
+    "category": "Education",
+    "difficulty": "medium"
+  },
+  {
+    "text": "Should college be free for everyone?",
+    "category": "Education",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Defend or oppose: grades do more harm than good.",
+    "category": "Education",
+    "difficulty": "hard"
+  },
+  {
+    "text": "How should schools prepare students for jobs that don't exist yet?",
+    "category": "Education",
+    "difficulty": "hard"
+  },
+  {
+    "text": "Argue for or against: teachers should be paid based on student performance.",
+    "category": "Education",
+    "difficulty": "hard"
+  }
+]
