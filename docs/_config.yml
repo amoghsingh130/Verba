@@ -1,0 +1,14 @@
+title: Verba
+description: Practice impromptu speaking with AI feedback. Built for iOS.
+theme: jekyll-theme-cayman
+url: https://amoghsingh130.github.io
+baseurl: /Verba
+
+exclude:
+  - Verba/
+  - worker/
+  - "*.xcodeproj"
+  - node_modules/
+  - .wrangler/
+  - "*.swift"
+  - "*.ts"
