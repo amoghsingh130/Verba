@@ -400,8 +400,8 @@
 				DEVELOPMENT_TEAM = 2R64DS35J5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Verba needs microphone access to record your speech for feedback and analysis.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Verba uses speech recognition to transcribe your speech in real time for analysis.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Verba uses your microphone so you can record practice sessions. Your audio stays on your device — only the transcribed text is sent for feedback.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Verba transcribes your speech on your device using Apple's speech recognition. Audio is never uploaded.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -434,8 +434,8 @@
 				DEVELOPMENT_TEAM = 2R64DS35J5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Verba needs microphone access to record your speech for feedback and analysis.";
-				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Verba uses speech recognition to transcribe your speech in real time for analysis.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Verba uses your microphone so you can record practice sessions. Your audio stays on your device — only the transcribed text is sent for feedback.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Verba transcribes your speech on your device using Apple's speech recognition. Audio is never uploaded.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
