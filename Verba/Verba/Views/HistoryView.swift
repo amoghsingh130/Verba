@@ -164,13 +164,13 @@ struct HistoryView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
-            Image(systemName: "mic.slash")
-                .font(.system(size: 48))
-                .foregroundStyle(.secondary)
-            Text("No sessions yet")
+        VStack(spacing: 16) {
+            Image(systemName: "clock.arrow.circlepath")
+                .font(.system(size: 52, weight: .light))
+                .foregroundStyle(Theme.primary.opacity(0.7))
+            Text("Your sessions will live here")
                 .font(.headline)
-            Text("Completed practice sessions will appear here.")
+            Text("Finish a practice session and it'll show up — with the prompt, transcript, and feedback all saved.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)

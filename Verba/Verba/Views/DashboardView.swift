@@ -229,13 +229,13 @@ struct DashboardView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 16) {
             Image(systemName: "chart.line.uptrend.xyaxis")
-                .font(.system(size: 48))
-                .foregroundStyle(.secondary)
-            Text("No data yet")
+                .font(.system(size: 52, weight: .light))
+                .foregroundStyle(Theme.primary.opacity(0.7))
+            Text("Your progress will show up here")
                 .font(.headline)
-            Text("Complete a few practice sessions to see your progress.")
+            Text("Practice a few sessions and you'll see score trends, streaks, filler-word counts, and words-per-minute over time.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
