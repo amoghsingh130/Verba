@@ -2,6 +2,8 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
+
     var body: some View {
         TabView {
             PracticeTab()
@@ -17,6 +19,9 @@ struct ContentView: View {
                 .tabItem { Label("Learn", systemImage: "book.fill") }
         }
         .tint(Theme.primary)
+        .fullScreenCover(isPresented: .constant(!hasCompletedOnboarding)) {
+            OnboardingView()
+        }
     }
 }
 
