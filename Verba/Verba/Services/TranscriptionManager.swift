@@ -40,13 +40,16 @@ final class TranscriptionManager {
 
     // MARK: - Transcription
 
-    func start() {
+    @discardableResult
+    func start() -> Bool {
         recognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
-        guard let recognizer, recognizer.isAvailable else { return }
+        guard let recognizer, recognizer.isAvailable else { return false }
+        guard recognizer.supportsOnDeviceRecognition else { return false }
 
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.shouldReportPartialResults = true
         request.addsPunctuation = true
+        request.requiresOnDeviceRecognition = true
 
         recognitionRequest = request
         isTranscribing = true
@@ -70,6 +73,7 @@ final class TranscriptionManager {
                 }
             }
         }
+        return true
     }
 
     func appendBuffer(_ buffer: AVAudioPCMBuffer) {

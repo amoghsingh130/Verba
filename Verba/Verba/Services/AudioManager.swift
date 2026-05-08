@@ -23,6 +23,9 @@ final class AudioManager {
     private(set) var currentFileURL: URL?
 
     var onBuffer: ((AVAudioPCMBuffer) -> Void)?
+    var onInterruption: (() -> Void)?
+
+    private var interruptionObserver: NSObjectProtocol?
 
     // MARK: - Recording
 
@@ -61,9 +64,37 @@ final class AudioManager {
         state = .recording
 
         startTimer()
+        observeInterruptions()
+    }
+
+    private func observeInterruptions() {
+        guard interruptionObserver == nil else { return }
+        interruptionObserver = NotificationCenter.default.addObserver(
+            forName: AVAudioSession.interruptionNotification,
+            object: AVAudioSession.sharedInstance(),
+            queue: .main
+        ) { [weak self] note in
+            guard
+                let self,
+                self.state == .recording,
+                let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+                let type = AVAudioSession.InterruptionType(rawValue: raw),
+                type == .began
+            else { return }
+            _ = self.stopRecording()
+            self.onInterruption?()
+        }
+    }
+
+    private func removeInterruptionObserver() {
+        if let observer = interruptionObserver {
+            NotificationCenter.default.removeObserver(observer)
+            interruptionObserver = nil
+        }
     }
 
     func stopRecording() -> (url: URL, duration: TimeInterval)? {
+        removeInterruptionObserver()
         audioEngine?.inputNode.removeTap(onBus: 0)
         audioEngine?.stop()
         audioEngine = nil

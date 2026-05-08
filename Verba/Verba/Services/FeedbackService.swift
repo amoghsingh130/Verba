@@ -1,7 +1,6 @@
 import Foundation
 
 struct FeedbackService {
-    // TODO: Replace with your deployed Cloudflare Worker URL
     static var workerURL = URL(string: "https://verba-feedback.verba-feedback.workers.dev")!
 
     static var deviceID: String {

@@ -4,6 +4,7 @@ import SwiftData
 struct PracticeView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.scenePhase) private var scenePhase
 
     let prompt: SpeechPrompt
 
@@ -14,15 +15,58 @@ struct PracticeView: View {
         case review
     }
 
+    enum PracticeAlert: Identifiable {
+        case micPermission
+        case speechPermission
+        case onDeviceUnavailable
+        case interruption
+        case backgrounded
+
+        var id: String { String(describing: self) }
+
+        var title: String {
+            switch self {
+            case .micPermission: return "Microphone Access"
+            case .speechPermission: return "Speech Recognition Access"
+            case .onDeviceUnavailable: return "On-Device Transcription Unavailable"
+            case .interruption: return "Recording Interrupted"
+            case .backgrounded: return "Session Stopped"
+            }
+        }
+
+        var message: String {
+            switch self {
+            case .micPermission:
+                return "Verba needs microphone access to record your speech. Enable it in Settings."
+            case .speechPermission:
+                return "Verba needs speech recognition access to transcribe your sessions on-device. Enable it in Settings."
+            case .onDeviceUnavailable:
+                return "Verba transcribes your speech entirely on your device so audio never leaves your phone. This device doesn't support on-device speech recognition, so practice sessions can't be recorded."
+            case .interruption:
+                return "Your session was interrupted by another audio source — likely a phone call or Siri. Tap record to start a new session."
+            case .backgrounded:
+                return "Verba pauses recording when the app goes to the background. Tap record to start a new session."
+            }
+        }
+
+        var routesToSettings: Bool {
+            switch self {
+            case .micPermission, .speechPermission: return true
+            default: return false
+            }
+        }
+    }
+
     @State private var phase: Phase = .prep
     @State private var audio = AudioManager()
     @State private var transcription = TranscriptionManager()
-    @State private var hasPermission = false
-    @State private var showPermissionAlert = false
+    @State private var hasMicPermission = false
+    @State private var hasSpeechPermission = false
+    @State private var activeAlert: PracticeAlert?
     @State private var recordingResult: (url: URL, duration: TimeInterval)?
     @State private var savedSession: SpeechSession?
     @State private var isFetchingFeedback = false
-    @State private var feedbackError: String?
+    @State private var feedbackError: FeedbackService.FeedbackError?
 
     var body: some View {
         Group {
@@ -47,19 +91,28 @@ struct PracticeView: View {
         .navigationBarHidden(isRecordingOrCountdown)
         .navigationBarBackButtonHidden(isRecordingOrCountdown)
         .toolbar(isRecordingOrCountdown ? .hidden : .visible, for: .tabBar)
-        .alert("Microphone Access", isPresented: $showPermissionAlert) {
-            Button("Open Settings") {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
-                }
+        .alert(item: $activeAlert) { alert in
+            if alert.routesToSettings {
+                return Alert(
+                    title: Text(alert.title),
+                    message: Text(alert.message),
+                    primaryButton: .default(Text("Open Settings")) {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            UIApplication.shared.open(url)
+                        }
+                    },
+                    secondaryButton: .cancel()
+                )
+            } else {
+                return Alert(title: Text(alert.title), message: Text(alert.message), dismissButton: .default(Text("OK")))
             }
-            Button("Cancel", role: .cancel) {}
-        } message: {
-            Text("Verba needs microphone access to record your speech. Enable it in Settings.")
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            handleScenePhaseChange(newPhase)
         }
         .task {
-            hasPermission = await AudioManager.requestPermission()
-            let _ = await TranscriptionManager.requestPermission()
+            hasMicPermission = await AudioManager.requestPermission()
+            hasSpeechPermission = await TranscriptionManager.requestPermission()
         }
     }
 
@@ -302,14 +355,18 @@ struct PracticeView: View {
                     .foregroundStyle(.orange)
                 Text("Feedback Failed")
                     .font(.headline)
-                Text(error)
+                Text(error.localizedDescription)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                Button("Retry") {
-                    retryFeedback()
+                if case .rateLimited = error {
+                    EmptyView()
+                } else {
+                    Button("Retry") {
+                        retryFeedback()
+                    }
+                    .buttonStyle(.bordered)
                 }
-                .buttonStyle(.bordered)
             }
 
             Button("Done") {
@@ -471,8 +528,12 @@ struct PracticeView: View {
     // MARK: - Actions
 
     private func startCountdown() {
-        guard hasPermission else {
-            showPermissionAlert = true
+        guard hasMicPermission else {
+            activeAlert = .micPermission
+            return
+        }
+        guard hasSpeechPermission else {
+            activeAlert = .speechPermission
             return
         }
         phase = .countdown(3)
@@ -488,12 +549,41 @@ struct PracticeView: View {
 
     private func beginRecording() {
         transcription.reset()
-        transcription.start()
+        guard transcription.start() else {
+            phase = .prep
+            activeAlert = .onDeviceUnavailable
+            return
+        }
         audio.onBuffer = { buffer in
             transcription.appendBuffer(buffer)
         }
+        audio.onInterruption = {
+            transcription.reset()
+            recordingResult = nil
+            phase = .prep
+            activeAlert = .interruption
+        }
         try? audio.startRecording()
         phase = .recording
+    }
+
+    private func handleScenePhaseChange(_ newPhase: ScenePhase) {
+        guard newPhase != .active else { return }
+        switch phase {
+        case .recording:
+            _ = audio.stopRecording()
+            audio.stopPlayback()
+            transcription.reset()
+            recordingResult = nil
+            phase = .prep
+            activeAlert = .backgrounded
+        case .countdown:
+            transcription.reset()
+            phase = .prep
+            activeAlert = .backgrounded
+        case .prep, .review:
+            break
+        }
     }
 
     private func stopRecording() {
@@ -546,8 +636,11 @@ struct PracticeView: View {
                 let feedback = try await FeedbackService.requestFeedback(for: session)
                 session.feedback = feedback
                 isFetchingFeedback = false
+            } catch let error as FeedbackService.FeedbackError {
+                feedbackError = error
+                isFetchingFeedback = false
             } catch {
-                feedbackError = error.localizedDescription
+                feedbackError = .server(statusCode: 0)
                 isFetchingFeedback = false
             }
         }
