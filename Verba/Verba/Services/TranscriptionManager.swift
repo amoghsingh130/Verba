@@ -11,6 +11,8 @@ final class TranscriptionManager {
     private var recognizer: SFSpeechRecognizer?
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
+    private var completedSegments: [String] = []
+    private var currentPartial: String = ""
 
     struct FillerDetection: Identifiable {
         let id = UUID()
@@ -46,34 +48,68 @@ final class TranscriptionManager {
         guard let recognizer, recognizer.isAvailable else { return false }
         guard recognizer.supportsOnDeviceRecognition else { return false }
 
+        completedSegments = []
+        currentPartial = ""
+        isTranscribing = true
+        return startNewRecognitionTask()
+    }
+
+    @discardableResult
+    private func startNewRecognitionTask() -> Bool {
+        guard let recognizer else { return false }
+
         let request = SFSpeechAudioBufferRecognitionRequest()
         request.shouldReportPartialResults = true
         request.addsPunctuation = true
         request.requiresOnDeviceRecognition = true
 
         recognitionRequest = request
-        isTranscribing = true
 
         recognitionTask = recognizer.recognitionTask(with: request) { [weak self] result, error in
             guard let self else { return }
+
             if let result {
                 let text = result.bestTranscription.formattedString
                 Task { @MainActor in
-                    self.processTranscription(text)
-                }
-                if result.isFinal {
-                    Task { @MainActor in
-                        self.isTranscribing = false
+                    self.currentPartial = text
+                    self.refreshTranscript()
+                    if result.isFinal {
+                        self.finalizeCurrentSegment()
+                        if self.isTranscribing {
+                            _ = self.startNewRecognitionTask()
+                        }
                     }
                 }
             }
+
             if error != nil {
                 Task { @MainActor in
-                    self.isTranscribing = false
+                    self.finalizeCurrentSegment()
+                    if self.isTranscribing {
+                        _ = self.startNewRecognitionTask()
+                    }
                 }
             }
         }
         return true
+    }
+
+    @MainActor
+    private func finalizeCurrentSegment() {
+        let trimmed = currentPartial.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !trimmed.isEmpty {
+            completedSegments.append(trimmed)
+        }
+        currentPartial = ""
+        refreshTranscript()
+    }
+
+    @MainActor
+    private func refreshTranscript() {
+        let combined = (completedSegments + [currentPartial])
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+        processTranscription(combined)
     }
 
     func appendBuffer(_ buffer: AVAudioPCMBuffer) {
@@ -81,19 +117,22 @@ final class TranscriptionManager {
     }
 
     func stop() {
+        // Prevent the restart loop once the user explicitly stops.
+        isTranscribing = false
         recognitionRequest?.endAudio()
         recognitionRequest = nil
-        // Don't cancel the task — let it deliver the final transcript.
-        // It will set isTranscribing = false when isFinal arrives or on error.
+        // Let the task deliver its final result; finalizeCurrentSegment will flush it.
     }
 
     func reset() {
+        isTranscribing = false
         recognitionRequest?.endAudio()
         recognitionTask?.cancel()
         recognitionTask = nil
         recognitionRequest = nil
         recognizer = nil
-        isTranscribing = false
+        completedSegments = []
+        currentPartial = ""
         transcript = ""
         fillerWords = []
         wordCount = 0
