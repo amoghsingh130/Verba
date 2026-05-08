@@ -1,5 +1,7 @@
 import Speech
 import Observation
+import AVFoundation
+import QuartzCore
 
 @Observable
 final class TranscriptionManager {
@@ -13,6 +15,12 @@ final class TranscriptionManager {
     private var recognitionTask: SFSpeechRecognitionTask?
     private var completedSegments: [String] = []
     private var currentPartial: String = ""
+
+    // Silence-based task rotation: forces isFinal so we can flush + restart.
+    private var lastNonSilenceTime: CFTimeInterval = 0
+    private var rotationPending = false
+    private static let silenceRMSThreshold: Float = 0.005
+    private static let silenceRotateDuration: CFTimeInterval = 1.2
 
     struct FillerDetection: Identifiable {
         let id = UUID()
@@ -50,6 +58,8 @@ final class TranscriptionManager {
 
         completedSegments = []
         currentPartial = ""
+        lastNonSilenceTime = 0
+        rotationPending = false
         isTranscribing = true
         return startNewRecognitionTask()
     }
@@ -64,21 +74,17 @@ final class TranscriptionManager {
         request.requiresOnDeviceRecognition = true
 
         recognitionRequest = request
+        rotationPending = false
+        lastNonSilenceTime = 0
 
         recognitionTask = recognizer.recognitionTask(with: request) { [weak self] result, error in
             guard let self else { return }
 
             if let result {
                 let text = result.bestTranscription.formattedString
+                let isFinal = result.isFinal
                 Task { @MainActor in
-                    self.currentPartial = text
-                    self.refreshTranscript()
-                    if result.isFinal {
-                        self.finalizeCurrentSegment()
-                        if self.isTranscribing {
-                            _ = self.startNewRecognitionTask()
-                        }
-                    }
+                    self.handleResultText(text, isFinal: isFinal)
                 }
             }
 
@@ -92,6 +98,29 @@ final class TranscriptionManager {
             }
         }
         return true
+    }
+
+    @MainActor
+    private func handleResultText(_ text: String, isFinal: Bool) {
+        // Safety net: if the new cumulative text doesn't extend the current partial
+        // and is materially shorter, the recognizer silently rolled the segment.
+        // Flush the previous partial as a completed segment before overwriting.
+        if !currentPartial.isEmpty,
+           !text.hasPrefix(currentPartial),
+           text.count < currentPartial.count / 2 {
+            completedSegments.append(currentPartial)
+            currentPartial = ""
+        }
+
+        currentPartial = text
+        refreshTranscript()
+
+        if isFinal {
+            finalizeCurrentSegment()
+            if isTranscribing {
+                _ = startNewRecognitionTask()
+            }
+        }
     }
 
     @MainActor
@@ -114,14 +143,46 @@ final class TranscriptionManager {
 
     func appendBuffer(_ buffer: AVAudioPCMBuffer) {
         recognitionRequest?.append(buffer)
+        checkForSilence(buffer: buffer)
+    }
+
+    private func checkForSilence(buffer: AVAudioPCMBuffer) {
+        guard let channelData = buffer.floatChannelData?[0], buffer.frameLength > 0 else { return }
+        let frames = Int(buffer.frameLength)
+        var sum: Float = 0
+        for i in 0..<frames {
+            sum += channelData[i] * channelData[i]
+        }
+        let rms = sqrtf(sum / Float(frames))
+        let now = CACurrentMediaTime()
+
+        if rms > Self.silenceRMSThreshold {
+            lastNonSilenceTime = now
+        } else if lastNonSilenceTime > 0,
+                  (now - lastNonSilenceTime) > Self.silenceRotateDuration,
+                  !rotationPending {
+            rotationPending = true
+            Task { @MainActor in
+                self.rotateOnSilence()
+            }
+        }
+    }
+
+    @MainActor
+    private func rotateOnSilence() {
+        guard isTranscribing else {
+            rotationPending = false
+            return
+        }
+        // Forces the current task to finalize. The result callback will then
+        // append the partial to completedSegments and start a new task.
+        recognitionRequest?.endAudio()
     }
 
     func stop() {
-        // Prevent the restart loop once the user explicitly stops.
         isTranscribing = false
         recognitionRequest?.endAudio()
         recognitionRequest = nil
-        // Let the task deliver its final result; finalizeCurrentSegment will flush it.
     }
 
     func reset() {
@@ -133,6 +194,8 @@ final class TranscriptionManager {
         recognizer = nil
         completedSegments = []
         currentPartial = ""
+        lastNonSilenceTime = 0
+        rotationPending = false
         transcript = ""
         fillerWords = []
         wordCount = 0
@@ -157,7 +220,6 @@ final class TranscriptionManager {
             }
         }
 
-        // Check multi-word fillers
         let joined = words.joined(separator: " ")
         for phrase in Self.discourseFillersInContext {
             var searchRange = joined.startIndex..<joined.endIndex

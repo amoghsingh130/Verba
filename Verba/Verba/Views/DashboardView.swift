@@ -94,12 +94,34 @@ struct DashboardView: View {
     }
 
     private var rangePicker: some View {
-        Picker("Range", selection: $range) {
-            ForEach(TimeRange.allCases) { option in
-                Text(option.rawValue).tag(option)
+        VStack(alignment: .leading, spacing: 6) {
+            Picker("Range", selection: $range) {
+                ForEach(TimeRange.allCases) { option in
+                    Text(option.rawValue).tag(option)
+                }
             }
+            .pickerStyle(.segmented)
+            Text(rangeLabel)
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
-        .pickerStyle(.segmented)
+    }
+
+    private var rangeLabel: String {
+        let count = filteredSessions.count
+        let countText = "\(count) session\(count == 1 ? "" : "s")"
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        switch range {
+        case .week:
+            let start = Calendar.current.date(byAdding: .day, value: -6, to: Date()) ?? Date()
+            return "Last 7 days · \(formatter.string(from: start))–\(formatter.string(from: Date())) · \(countText)"
+        case .month:
+            let start = Calendar.current.date(byAdding: .day, value: -29, to: Date()) ?? Date()
+            return "Last 30 days · \(formatter.string(from: start))–\(formatter.string(from: Date())) · \(countText)"
+        case .all:
+            return "All time · \(countText)"
+        }
     }
 
     private var summaryGrid: some View {
