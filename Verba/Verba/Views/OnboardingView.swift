@@ -129,9 +129,11 @@ private struct PitchScreen: View {
 private struct AmbientWaveform: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { context in
-            let t = context.date.timeIntervalSinceReferenceDate
-            let level = CGFloat(0.35 + 0.25 * sin(t * 1.6) + 0.15 * sin(t * 0.7))
-            let clamped = min(max(level, 0), 1)
+            let t: Double = context.date.timeIntervalSinceReferenceDate
+            let wave1: Double = 0.25 * sin(t * 1.6)
+            let wave2: Double = 0.15 * sin(t * 0.7)
+            let level: CGFloat = CGFloat(0.35 + wave1 + wave2)
+            let clamped: CGFloat = min(max(level, 0), 1)
             ZStack {
                 Circle()
                     .stroke(Theme.primary.opacity(0.18), lineWidth: 2)
@@ -310,7 +312,7 @@ private struct PermissionRow: View {
             }
         case .notDetermined:
             Button(action: action) {
-                Text("Allow")
+                Text("Continue")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(.white)
                     .padding(.horizontal, 14)
